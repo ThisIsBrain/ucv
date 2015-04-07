@@ -16,4 +16,6 @@ DEPENDPATH *= $$PATHS
 include($$PWD/modules/core/core.pro)
 include($$PWD/modules/math/math.pro)
 include($$PWD/modules/contour/contour.pro)
+include($$PWD/modules/graphic_pillars/graphic_pillars.pro)
+
 include($$PWD/modules/sample/sample.pro)

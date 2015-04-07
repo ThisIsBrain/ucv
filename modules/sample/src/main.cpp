@@ -30,15 +30,16 @@ int main(int argc, char* argv[])
     IplImage* cntr = cvCreateImage(cvGetSize(src), 8, 1);
     cvZero(cntr);
 
-    //аходим контуры
+	//находим контуры
     ucv::ContourStorage storage;
     ucv::findContours(bin, &storage);
 
-    //аппроксимируем контуры
-//    ucv::DominantPoints d_points;
-//    for(ucv::ContourStorageIt it=storage.begin(); it!=storage.end(); ++it){
-//        ucv::approxContoursDp(&(*it), d_points,)
-//    }
+	//находим прямые
+	std::vector<ucv::Line> lines;
+	ucv::SearchLine::find(&storage, &lines, 2.0f);
+	std::cout << lines.size() << std::endl;
+	ucv::SearchLine::draw(src, &lines, CV_RGB(255, 255, 255));
+
 
     //вывод
     cvShowImage("src", src);

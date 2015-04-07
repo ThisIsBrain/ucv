@@ -17,8 +17,7 @@ namespace ucv
 		float a;
 		float b;
 		float c;
-	}
-	LineAbc;
+	}LineAbc;
 	
 	//конструктор
 	LineAbc lineAbc(float a, float b, float c);
@@ -41,8 +40,7 @@ namespace ucv
 	{
 		ContourIt begin;
 		ContourIt end;
-	}
-	ContourSegment;
+	}ContourSegment;
 	//=====================================================
 	
 	
@@ -61,8 +59,10 @@ namespace ucv
 		CvPoint end;		//координаты конца отрезка
 		
 		float weight;		//вес прямой
-	}
-	Line;
+	}Line;
+
+	typedef std::vector<Line> Lines;				//массив прямых
+	typedef std::vector<Line>::iterator LinesIt;	//
 	
 	
 	//окружность
@@ -73,12 +73,11 @@ namespace ucv
 		std::vector<ContourSegment> segments;	//cегменты контура соответсвующие данной окружности
 		
 		float weight;		//вес окружности
-	}
-	Circle;
+	}Circle;
 	//=====================================================
 
 }
 
 
 #endif
-/*End of file*/
+/*End of file types.h*/
