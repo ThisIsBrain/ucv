@@ -40,6 +40,21 @@ int main(int argc, char* argv[])
 	std::cout << lines.size() << std::endl;
 	ucv::SearchLine::draw(src, &lines, CV_RGB(255, 255, 255));
 
+	ucv::Array2<int> arr;
+	arr.init(10, 10);
+
+	for(int i=0; i<10; i++){
+		for(int j=0; j<10; j++){
+			arr.data[i][j]=i*10+j;
+		}
+	}
+
+	for(int i=0; i<10; i++){
+		for(int j=0; j<10; j++){
+			std::cout << arr.data[i][j] << " ";
+		}
+	std::cout << std::endl;
+	}
 
     //вывод
     cvShowImage("src", src);

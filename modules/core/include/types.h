@@ -6,6 +6,9 @@
 #include <list>
 #include <vector>
 
+#include "array_2.h"
+#include "array_3.h"
+
 
 namespace ucv
 {
@@ -74,6 +77,9 @@ namespace ucv
 		
 		float weight;		//вес окружности
 	}Circle;
+
+	typedef std::vector<Circle> Circles;				//массив окружностей
+	typedef std::vector<Circle>::iterator CirclesIt;	//
 	//=====================================================
 
 }

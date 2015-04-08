@@ -10,10 +10,14 @@ OBJECTS_DIR = objects
 
 
 SOURCES *= \
-    $$PWD/src/graphic_pillars.cpp
+    $$PWD/src/search_line.cpp\
+    $$PWD/src/search_circle.cpp
+
 
 HEADERS *= \
-    $$PWD/include/graphic_pillars.h
+    $$PWD/include/graphic_pillars.h \
+    $$PWD/include/search_line.h \
+    $$PWD/include/search_circle.h \
 
 PATHS *= \
     $$PWD \
