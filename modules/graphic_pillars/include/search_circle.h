@@ -8,10 +8,20 @@ namespace ucv
 	class SearchCircle
 	{
 		public:
+
+		//труктура опций
+		struct Option
+		{
+			int maxRadius;			//максимальный радиус окружностей
+			bool isFastCalcRadius;	//быстрое вычисление радиуса
+			float accApproxLine;	//очность аппроксимации контуров
+			int threadCenter;		//пороговое значение для возможного центра
+			int threadCirclePercent;//пороговое часть окружноости
+		};
+
 		// SearchCircle();
 		SearchCircle(
-				CvSize sizeImg,	//размер изображения
-				int maxRadius 	//максимальный радиус окружности	
+				CvSize sizeImg	//размер изображения
 				);
 
 		~SearchCircle();
@@ -20,15 +30,38 @@ namespace ucv
 		int find(
 				ucv::ContourStorage* contours,	//контуры
 				ucv::Lines* lines,				//прямые
-				ucv::Circles* circles			//массив окружностей
+				ucv::Circles* circles,			//массив окружностей
+				Option option					//параметры поиска
 				);
 
+
+		//трисовка окружностей
+		static int draw(
+				IplImage* img,
+				ucv::Circles* circles,
+				CvScalar scalar
+				);
+
+
 		private:
-		CvSize sizeImg_;	//размер изображения
-		int maxRadius_;		//максимальный радиус окружности
+		//размер изображения
+		CvSize sizeImg_;
 
 		//массив потенциальных центров окружностей
-		ucv::Array2< std::list<LinesIt> > accum4centre_;
+		ucv::Array2< std::vector<LinesIt> > accum4centre_;
+
+		//вычисление приблизительного радиуса
+		float calcAppRadius(
+						float lenght,	//длина хорды
+						float accApprox //точность аппроксимации
+						);
+
+		//рисование прямых в аккумуляторном массиве (Алгоритм Брезенхема)
+		void drawLineB(
+					CvPoint begin,			//начальная точка
+					CvPoint end,			//конечная точка
+					ucv::LinesIt lineIt		//
+					);
 	};
 }
 

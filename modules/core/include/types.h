@@ -6,6 +6,7 @@
 #include <list>
 #include <vector>
 
+#include "array_1.h"
 #include "array_2.h"
 #include "array_3.h"
 
@@ -62,6 +63,8 @@ namespace ucv
 		CvPoint end;		//координаты конца отрезка
 		
 		float weight;		//вес прямой
+
+		float lenght;		//квадрат длины прямой
 	}Line;
 
 	typedef std::vector<Line> Lines;				//массив прямых

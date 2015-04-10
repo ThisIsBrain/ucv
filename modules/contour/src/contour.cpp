@@ -49,6 +49,11 @@ inline bool ucv::NEIGHBOR_PIXEL(	IplImage* src,		//исходное контур
 									)
 {
 	//здесь должна быть проверка на принадлежность пикселя контуру
+
+	if(pt->x==0 || pt->y==0 || pt->x == src->width-1 || pt->y == src->height-1)
+	{
+		return false;
+	}
 	
 	PIXEL(uchar, src, pt->x, pt->y)[0]=254;	//помечаем точку как найденную
 	

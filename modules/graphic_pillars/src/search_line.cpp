@@ -61,6 +61,10 @@ int ucv::SearchLine::find(
 			//вес прямой
 			//(пока квадрат длины прямой)
 			line.weight = pow(line.begin.x-line.end.x, 2) + pow(line.begin.y-line.end.y, 2);
+
+			//длина прямой
+			line.lenght = pow(line.begin.x-line.end.x, 2) + pow(line.begin.y-line.end.y, 2);
+			line.lenght = sqrt(line.lenght);
 			
 			//записываем прямую в вектор
 			lines->push_back(line); 
@@ -86,4 +90,8 @@ int ucv::SearchLine::draw(
 	}
 	return 0;
 }
+//==============================================================================
+
+
+
 /*End of file search_line.cpp*/

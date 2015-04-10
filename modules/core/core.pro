@@ -8,7 +8,8 @@ HEADERS *= \
     $$PWD/include/types.h \
     $$PWD/include/opencv_methods.h \
     $$PWD/include/array_3.h \
-    $$PWD/include/array_2.h
+    $$PWD/include/array_2.h \
+    $$PWD/include/array_1.h
 
 PATHS *= \
     $$PWD \
