@@ -8,7 +8,8 @@ ucv::SearchCircle::SearchCircle(
 				CvSize sizeImg	//размер изображения
 				)
 {
-	sizeImg_	=	sizeImg;
+	//размер аккумулятивного массива потенциальных центров
+	sizeImg_=sizeImg;
 
 	//аккумуляторный массив потенциальных центров окружностей
 	accum4centre_.init(sizeImg.width, sizeImg.height);
@@ -41,10 +42,10 @@ int ucv::SearchCircle::find(
 	ucv::ContourSegment segment;
 
 	ucv::Array1<int> accum4radius;
-	accum4radius.init(option.maxRadius+option.accApproxLine+2);
+	accum4radius.init((option.maxRadius+option.accApproxLine+1)/option.devRadius);
 
 	float radius;	//радиус
-	float weight;	//
+	float weight;	//вес точки
 
 	//1. Находим потенциальные центры окружностей на изображении
 
@@ -68,6 +69,10 @@ int ucv::SearchCircle::find(
 			min_radius = app_radius-2.0f;
 		}
 
+		//если больше минимального радиуса
+		if(option.minRadius>min_radius){
+			continue;
+		}
 
 		//рисуем перпендикуляры в аккумуляторном массиве в обе стороны от прямой
 		for(int k=0; k<2; k++){
@@ -75,8 +80,10 @@ int ucv::SearchCircle::find(
 			begin.x=mid_pt.x+i->option.a*(float)(min_radius)/vector;
 			begin.y=mid_pt.y+i->option.b*(float)(min_radius)/vector;
 
+
 			end.x=mid_pt.x+i->option.a*(float)(option.maxRadius)/vector; //x0+a*step
 			end.y=mid_pt.y+i->option.b*(float)(option.maxRadius)/vector;
+
 
 			drawLineB(begin, end, i);
 
@@ -85,14 +92,18 @@ int ucv::SearchCircle::find(
 		}
 	}
 
-//	IplImage* dst = cvCreateImage(sizeImg_, 8, 1);
-//	for(int x=0; x<dst->width; x++){
-//		for(int y=0; y<dst->height; y++){
-//			PIXEL(uchar, dst, x, y)[0]=accum4centre_.data[x][y].size()*50;
-//		}
-//	}
-//	cvShowImage("out", dst);
-//	cvWaitKey(0);
+
+	IplImage* dst = cvCreateImage(sizeImg_, 8, 3);
+	for(int x=0; x<dst->width; x++){
+		for(int y=0; y<dst->height; y++){
+			PIXEL(uchar, dst, x, y)[0]=accum4centre_.data[x][y].size()*50;
+			PIXEL(uchar, dst, x, y)[1]=accum4centre_.data[x][y].size()*50;
+			PIXEL(uchar, dst, x, y)[2]=accum4centre_.data[x][y].size()*50;
+		}
+	}
+	ucv::SearchLine::draw(dst, lines, CV_RGB(0, 255, 0));
+	cvShowImage("out", dst);
+
 
 	//2. Уточняем наличие окружностей в найденных точках
 
@@ -103,9 +114,9 @@ int ucv::SearchCircle::find(
 			int val = accum4centre_.data[x][y].size();
 
 			//если нашли потенциальный центер
-			if(val>option.threadCenter){
+			if(val>=option.threadCenter){
 
-				//брасываем аккумулятор
+				//cбрасываем аккумулятор
 				for(int i=0; i<accum4radius.size.size_a; i++){
 					accum4radius.data[i]=0;
 				}
@@ -137,11 +148,11 @@ int ucv::SearchCircle::find(
 
 						//засчитываем
 						if((int)(radius)>=0 && (int)(radius)<accum4radius.size.size_a){
-							accum4radius.data[(int)(radius)]+=weight;
+							accum4radius.data[(int)(radius/option.devRadius)]+=weight;
 						}
 
 					}else{
-						//для каждоой точки контура
+						//для каждой точки контура
 						for(ucv::ContourIt cIt = (*l)->segment.begin;
 							cIt!= (*l)->segment.end; ++cIt){
 							//вычисляем растояние от точки до центра
@@ -150,12 +161,11 @@ int ucv::SearchCircle::find(
 							radius = sqrt( delta_x*delta_x + delta_y*delta_y );
 
 							if(radius>=accum4radius.size.size_a){
-								std::cout << "over" << radius-accum4radius.size.size_a << "\n";
 								continue;
 							}
 
 							//голос за данный радиус
-							accum4radius.data[(int)(radius)]++;
+							accum4radius.data[(int)(radius/option.devRadius)]++;
 						}
 					}
 
@@ -174,7 +184,7 @@ int ucv::SearchCircle::find(
 				}
 
 				if(maxW>option.threadCirclePercent){
-					circle.radius=maxR;
+					circle.radius=maxR*option.devRadius;
 					circle.weight=maxW;
 					circle.center.x=x;
 					circle.center.y=y;

@@ -12,11 +12,13 @@ namespace ucv
 		//труктура опций
 		struct Option
 		{
+			int minRadius;			//минимальный радиус окружностей
 			int maxRadius;			//максимальный радиус окружностей
 			bool isFastCalcRadius;	//быстрое вычисление радиуса
-			float accApproxLine;	//очность аппроксимации контуров
+			float accApproxLine;	//точность аппроксимации контуров
 			int threadCenter;		//пороговое значение для возможного центра
 			int threadCirclePercent;//пороговое часть окружноости
+			int devRadius;			//точность квантования аккумулитивного массива радиуса
 		};
 
 		// SearchCircle();
@@ -35,7 +37,7 @@ namespace ucv
 				);
 
 
-		//трисовка окружностей
+		//отрисовка окружностей
 		static int draw(
 				IplImage* img,
 				ucv::Circles* circles,
